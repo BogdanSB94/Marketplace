@@ -1,0 +1,28 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+    <span class="mt-5 py-4 px-80 grid place-items-center bg-gray-500 text-xl rounded-xl text-white cursor-default">Shopping Cart</span>
+
+    <ul class="mt-4">
+        {% for cart_item in cart_items %}
+            <li class="flex justify-between items-center bg-blue-500 rounded-xl py-2 px-4 mb-2">
+                <span class="font-bold">{{ cart_item.item.name }}</span>
+                <span>${{ cart_item.item.price }} x {{ cart_item.quantity }} = ${{ cart_item.subtotal }}</span>
+                <form action="{% url 'shop:view_cart' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="item_id" value="{{ cart_item.id }}">
+                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-xl">Remove</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <p class="mt-4 font-bold text-xl">Total: ${{ total }}</p>
+
+<div class="flex justify-center mt-4">
+    <a href="/" class="bg-yellow-600 text-white px-8 py-4 rounded-xl mr-4">Continue Shopping</a>
+    <a href="/purchase_complete/" class="bg-blue-600 text-white px-8 py-4 rounded-xl mr-4">Confirm Order (PayPal)</a>
+    <a href="/purchase_complete/" class="bg-green-600 text-white px-8 py-4 rounded-xl">Confirm Order (Cash)</a>
+</div>
+
+{% endblock %}
